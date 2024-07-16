@@ -35,7 +35,11 @@ function Grid({ numberOfCards }) {
         winner && (
           <>
             <h1 className="turn_highlight">Winner is {winner}</h1>
-            <button onClick={reset}>Reset Game</button>
+            <div className="center">
+              <button className="button" onClick={reset}>
+                Reset Game
+              </button>
+            </div>
           </>
         )
       }
