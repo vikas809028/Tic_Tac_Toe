@@ -2,53 +2,71 @@ import { useState } from "react";
 import Card from "../Card/Card";
 import "./Grid.css";
 import IsWinner from "../../helpers/checkWinner";
+import IsDraw from "../../helpers/checkDraw";
 
 function Grid({ numberOfCards }) {
   const [board, setBoard] = useState(Array(numberOfCards).fill(""));
-  const [turn, setTurn] = useState(true); // true => O flase => X
-  const [winner, setwinner] = useState(null);
+  // true => O, false => X
+  const [turn, setTurn] = useState(true);
+  const [winner, setWinner] = useState(null);
+  const [isDraw, setIsDraw] = useState(false);
 
   function play(index) {
-    if (turn == true) {
-      board[index] = "O";
-    } else {
-      board[index] = "X";
+    if (board[index] !== "" || winner || isDraw) {
+      return; // Prevent playing on a filled cell or if the game is over
     }
-    const win = IsWinner(board, turn ? "O" : "X");
+
+    const newBoard = [...board];
+    newBoard[index] = turn ? "O" : "X";
+
+    const win = IsWinner(newBoard, turn ? "O" : "X");
     if (win) {
-      setwinner(win);
+      setWinner(win);
+    } else if (IsDraw(newBoard)) {
+      setIsDraw(true);
     }
-    setBoard([...board]);
+
+    setBoard(newBoard);
     setTurn(!turn);
   }
+
   function reset() {
     setTurn(true);
-    setwinner(null);
+    setWinner(null);
+    setIsDraw(false);
     setBoard(Array(numberOfCards).fill(""));
   }
 
   return (
     <div className="grid-container">
-      {
-        // this is logical and if winner is false it will return from here and if winner is true
-        // it will print the follwing code
-        winner && (
-          <>
-            <h1 className="turn_highlight">Winner is {winner}</h1>
-            <div className="center">
-              <button className="button" onClick={reset}>
-                Reset Game
-              </button>
-            </div>
-          </>
-        )
-      }
-      <h1 className="turn_highlight">Current Turn : {turn ? "O" : "X"}</h1>
+      {!winner && (
+        <>
+          <h1 className="turn_highlight">Winner is {winner}</h1>
+          <div className="center">
+            <button className="button" onClick={reset}>
+              Reset Game
+            </button>
+          </div>
+        </>
+      )}
+      {isDraw && !winner && (
+        <>
+          <h1 className="turn_highlight">It is a Draw!</h1>
+          <div className="center">
+            <button className="button" onClick={reset}>
+              <p style="text-height:10px">Reset Game</p>
+            </button>
+          </div>
+        </>
+      )}
+      {!winner && !isDraw && (
+        <h1 className="turn_highlight">Current Turn: {turn ? "O" : "X"}</h1>
+      )}
       <br />
       <div className="grid">
         {board.map((el, idx) => (
           <Card
-            gameEnd={winner ? true : false}
+            gameEnd={winner || isDraw}
             key={idx}
             onPlay={play}
             player={el}
@@ -59,4 +77,5 @@ function Grid({ numberOfCards }) {
     </div>
   );
 }
+
 export default Grid;
