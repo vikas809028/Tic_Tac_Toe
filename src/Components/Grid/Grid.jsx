@@ -12,10 +12,6 @@ function Grid({ numberOfCards }) {
   const [isDraw, setIsDraw] = useState(false);
 
   function play(index) {
-    if (board[index] !== "" || winner || isDraw) {
-      return; // Prevent playing on a filled cell or if the game is over
-    }
-
     const newBoard = [...board];
     newBoard[index] = turn ? "O" : "X";
 
@@ -39,7 +35,7 @@ function Grid({ numberOfCards }) {
 
   return (
     <div className="grid-container">
-      {!winner && (
+      {winner && (
         <>
           <h1 className="turn_highlight">Winner is {winner}</h1>
           <div className="center">
@@ -54,7 +50,7 @@ function Grid({ numberOfCards }) {
           <h1 className="turn_highlight">It is a Draw!</h1>
           <div className="center">
             <button className="button" onClick={reset}>
-              <p style="text-height:10px">Reset Game</p>
+              Reset Game
             </button>
           </div>
         </>
