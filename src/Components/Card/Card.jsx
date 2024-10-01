@@ -12,6 +12,7 @@ function Card({ gameEnd, player, onPlay, index }) {
   return (
     <Box
     border={"1px"}
+    borderRadius={"lg"}
 
       bg="white"
       height={{base:"140px",md:"150px",xl:"160px"}}
