@@ -1,20 +1,28 @@
+import { Box, Center } from "@chakra-ui/react";
 import Icon from "../Icon/Icon";
-import "./Card.css";
 
 function Card({ gameEnd, player, onPlay, index }) {
   let icon = <Icon />;
-  if (player == "O") {
+  if (player === "O") {
     icon = <Icon name="circle" />;
-  } else if (player == "X") {
+  } else if (player === "X") {
     icon = <Icon name="cross" />;
   }
+
   return (
-    <div
-      className="card"
-      onClick={() => !gameEnd && player == "" && onPlay(index)}
+    <Box
+    border={"1px"}
+
+      bg="white"
+      height={{base:"140px",md:"150px",xl:"160px"}}
+      width="100%"
+      m={0}
+      onClick={() => !gameEnd && player === "" && onPlay(index)}
+      cursor={!gameEnd && player === "" ? "pointer" : "not-allowed"}
     >
-      {icon}
-    </div>
+      <Center height="100%">{icon}</Center>
+    </Box>
   );
 }
+
 export default Card;

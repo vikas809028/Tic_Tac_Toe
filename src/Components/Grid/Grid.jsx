@@ -1,12 +1,12 @@
 import { useState } from "react";
+import { Box, Button, Flex, Heading, VStack } from "@chakra-ui/react";
 import Card from "../Card/Card";
-import "./Grid.css";
 import IsWinner from "../../helpers/checkWinner";
 import IsDraw from "../../helpers/checkDraw";
+import bgiImage from '../../assets/bgi.jpg'; // Import the background image
 
 function Grid({ numberOfCards }) {
   const [board, setBoard] = useState(Array(numberOfCards).fill(""));
-  // true => O, false => X
   const [turn, setTurn] = useState(true);
   const [winner, setWinner] = useState(null);
   const [isDraw, setIsDraw] = useState(false);
@@ -34,43 +34,66 @@ function Grid({ numberOfCards }) {
   }
 
   return (
-    <div className="grid-container">
-      {winner && (
-        <>
-          <h1 className="turn_highlight">Winner is {winner}</h1>
-          <div className="center">
-            <button className="button" onClick={reset}>
+    <Box
+      w="100%"
+      h="100vh"
+      backgroundImage={`url(${bgiImage})`} // Use the imported image
+      backgroundSize="cover"
+      backgroundPosition="center"
+      backgroundRepeat="no-repeat"
+      rounded={"revert"}
+    >
+      <Flex
+        boxShadow="lg"
+        borderRadius="lg"
+        w="100vw"
+        direction="column"
+        align="center"
+        justify="center"
+        h="100vh"
+        p={4}
+      
+      >
+        {winner && (
+          <VStack spacing={4} mb={6}>
+            <Heading fontSize={"xxx-large"} color={"red.500"} size="lg">Winner is {winner}</Heading>
+            <Button color={"white"} colorScheme="blue" onClick={reset}>
               Reset Game
-            </button>
-          </div>
-        </>
-      )}
-      {isDraw && !winner && (
-        <>
-          <h1 className="turn_highlight">It is a Draw!</h1>
-          <div className="center">
-            <button className="button" onClick={reset}>
+            </Button>
+          </VStack>
+        )}
+
+        {isDraw && !winner && (
+          <VStack spacing={4} mb={6}>
+            <Heading size="lg">It is a Draw!</Heading>
+            <Button colorScheme="blue" onClick={reset}>
               Reset Game
-            </button>
-          </div>
-        </>
-      )}
-      {!winner && !isDraw && (
-        <h1 className="turn_highlight">Current Turn: {turn ? "O" : "X"}</h1>
-      )}
-      <br />
-      <div className="grid">
-        {board.map((el, idx) => (
-          <Card
-            gameEnd={winner || isDraw}
-            key={idx}
-            onPlay={play}
-            player={el}
-            index={idx}
-          />
-        ))}
-      </div>
-    </div>
+            </Button>
+          </VStack>
+        )}
+
+        {!winner && !isDraw && (
+          <Heading fontSize={"xxx-large"} color={"red.300"} size="lg" mb={6}>
+            Current Turn: {turn ? "O" : "X"}
+          </Heading>
+        )}
+
+        <Flex
+          mx="auto"
+          flexDirection="row"
+          wrap="wrap"
+          w={{ base: "98%", sm: "70%", md: "60%", lg: "45%", xl: "30%" }}
+          boxShadow="lg"
+          borderRadius="md" >
+         
+          {board.map((el, idx) => (
+            <Box zIndex={1} w="33.33%" key={idx}>
+              <Card gameEnd={winner || isDraw} onPlay={play} player={el} index={idx} />
+            </Box>
+          ))}
+        </Flex>
+      </Flex>
+    </Box>
   );
 }
 

@@ -2,7 +2,7 @@
     --yellow : #f0ce79;
 }
 body{
-    background-image: url("./assets/bgi.jpg");
+   
     display: flex;
     align-items: center;
     justify-content: center;
